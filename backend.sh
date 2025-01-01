@@ -60,5 +60,28 @@ id expense &>>$LOG_FILE
     VALIDATE $? "Downloading Backend application code"
 
     cd /app
-    unzip /tmp/backend.zip
+    rm -rf /app/* #removes the existing code to prevent code & program errors.
+    unzip /tmp/backend.zip &>>$LOG_FILE
     VALIDATE $? "Extracting Backend application code"
+
+    npm install &>>$LOG_FILE
+    cp /home/ec2-user/expense-shell/backend.service/etc/systemd/system/backend.service
+
+    #load the data before running backend
+
+    dnf install mysql -y &>>$LOG_FILE
+    VALIDATE $? "Installing MYSQL Client"
+
+    mysql -h mysql.rohitdaws81s.shop -uroot -pExpenseApp@1 < /app/schema/backend.sql
+    VALIDATE $? "Schema Loading is success"
+
+    systemctl daemon-reload &>>$LOG_FILE
+    VALIDATE $? "Daemon reload"
+
+    systemctl enable backend &>>$LOG_FILE
+    VALIDATE $? "Enabled Backend"
+
+    systemctl restart backend &>>$LOG_FILE
+    VALIDATE $? "Restarted Backend"
+
+    
