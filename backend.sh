@@ -51,4 +51,14 @@ id expense &>>$LOG_FILE
         VALIDATE $? "creating expense user"
     else
         echo -e "expense user already availble.. $Y SKIPPING $N"
-    fi       
+    fi
+
+    mkdir -p /app #"-p" added for if /app folder exists folder shall not be added or else folder will be created.
+    VALIDATE $? "creating /app folder"
+
+    curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE #Download the application code to created app directory.
+    VALIDATE $? "Downloading Backend application code"
+
+    cd /app
+    unzip /tmp/backend.zip
+    VALIDATE $? "Extracting Backend application code"
