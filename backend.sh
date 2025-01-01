@@ -44,7 +44,7 @@ dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Install nodejs"
 
 id expense &>>$LOG_FILE
-    if [ $? -ne o ]
+    if [ $? -ne 0 ]
     then
         echo -e "expense user not available.. $G Creating expense user $N"
         useradd expense &>>$LOG_FILE
